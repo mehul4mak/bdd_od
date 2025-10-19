@@ -11,5 +11,6 @@ dependencies = [
     "numpy>=2.3.4",
     "pandas>=2.3.3",
     "pylint>=4.0.1",
+    "seaborn>=0.13.2",
     "torch>=2.9.0",
 ]
