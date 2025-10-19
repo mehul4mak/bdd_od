@@ -1,0 +1,7 @@
+[project]
+name = "bdd-od"
+version = "0.1.0"
+description = "Analyze and Evalaute BDD data on Pre-trained Object Detection Model"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = []
