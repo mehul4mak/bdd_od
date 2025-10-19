@@ -1,0 +1,32 @@
+[MASTER]
+# The maximum number of output lines
+max-line-length=120
+
+[MESSAGES CONTROL]
+# Disable specific message types
+disable=C0111, R0903, W0201
+
+[REPORTS]
+# Whether to display a full report
+output-format=text
+
+[LOGGING]
+# Logging module configuration
+logging-modules=logging
+
+[FORMAT]
+# Maximum number of characters on a single line
+max-line-length=100
+
+[DESIGN]
+# Maximum number of arguments for a function
+max-args=5
+
+[CLASSES]
+# List of class names for which member functions should not be flagged
+# for having too many methods
+valid-class-methods=__init__, __del__, __str__
+
+[TYPECHECK]
+# Python version to check compatibility for
+python-version=3.8
