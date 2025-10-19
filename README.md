@@ -19,7 +19,7 @@ This project focuses on analyzing the [Berkeley DeepDrive (BDD100K)](https://bdd
 ├── data/ # Placeholder for dataset (not included in repo)
 ├── notebooks/ # Jupyter notebooks for analysis and experimentation
 ├── src/ # Source code: data loaders, parsers, utilities
-├── docker/ # Dockerfile and config to run analysis in container
+├── .Dockerfile # Dockerfile and config to run analysis in container
 ├── results/ # Visualizations and reports
 ├── .pylintrc # Pylint configuration file for code style
 ├── requirements.txt # Python dependencies
@@ -30,7 +30,7 @@ This project focuses on analyzing the [Berkeley DeepDrive (BDD100K)](https://bdd
 
 ---
 
-## 1. 📊 Data Analysis (10 Points)
+## 1. 📊 Data Analysis 
 
 ### ✅ Objectives
 
@@ -46,11 +46,11 @@ This project focuses on analyzing the [Berkeley DeepDrive (BDD100K)](https://bdd
 - Visualizations include bar plots, sample images, class heatmaps, etc.
 
 📄 **See**: [`analysis_report.md`](./analysis_report.md) for detailed findings and visuals.  
-📁 **Code**: Available in [`src/data_analysis.py`](./src/data_analysis.py)
+📁 **Code**: Available in [`src/eda.py`](./src/eda.py)
 
 ---
 
-## 2. 🧠 Model (5 [+5] Points)
+## 2. 🧠 Model 
 
 ### ✅ Objectives
 
@@ -69,7 +69,7 @@ This project focuses on analyzing the [Berkeley DeepDrive (BDD100K)](https://bdd
 
 ---
 
-## 3. 📈 Evaluation & Visualization (10 Points)
+## 3. 📈 Evaluation & Visualization 
 
 ### ✅ Objectives
 
@@ -84,7 +84,7 @@ This project focuses on analyzing the [Berkeley DeepDrive (BDD100K)](https://bdd
 - Visualization tools implemented to overlay bounding boxes.
 - Model performance insights linked back to dataset characteristics.
 
-📁 **Code**: Available in [`src/evaluation.py`](./src/evaluation.py)
+📁 **Code**: Available in [`src/eval.py`](./src/eval.py)
 
 ---
 
@@ -96,7 +96,7 @@ To ensure consistent and reproducible results, the full pipeline is containerize
 
 ```bash
 # Build the Docker image
-docker build -t bdd-object-detection ./docker
+docker build -t bdd-object-detection .
 
 # Run the container
 docker run -it --rm -v $(pwd):/app bdd-object-detection
