@@ -100,3 +100,10 @@ docker build -t bdd-object-detection .
 
 # Run the container
 docker run -it --rm -v $(pwd):/app bdd-object-detection
+
+
+
+## 🔗 References
+- BDD100K Dataset: https://bdd-data.berkeley.edu/
+- Yu, Fisher et al. “BDD100K: A Diverse Driving Dataset for Heterogeneous Multitask Learning,” CVPR 2020.
+
