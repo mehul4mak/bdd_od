@@ -239,21 +239,78 @@ Recommendations: Consider data augmentation for rare classes, class-aware sampli
 - Aspect Ratio Distribution → `results/aspect_ratio_hist_train.png`
 ![Aspect Ratio Distribution ](results/aspect_ratio_hist_train.png)
 
+#### Extreme Object Sizes
+
+#### Smallest Objects
+These images show the smallest bounding boxes in the dataset. Small objects are often hard to detect and might require specific augmentation or higher-resolution input for the model.
+
+![Smallest 1](results/extreme_boxes/smallest_1_20a773e1-a9268e6b.jpg)
+![Smallest 2](results/extreme_boxes/smallest_2_7bc6abdd-6a5c7b75.jpg)
+![Smallest 3](results/extreme_boxes/smallest_3_3bb2f5c2-1463d3a1.jpg)
+![Smallest 4](results/extreme_boxes/smallest_4_a34c36f3-22c7e2c3.jpg)
+![Smallest 5](results/extreme_boxes/smallest_5_84643961-e2e4a747.jpg)
+
+#### Largest Objects
+These images show the largest bounding boxes in the dataset. Large objects may occupy most of the image and can dominate training if not balanced.
+
+![Largest 1](results/extreme_boxes/largest_1_414fe350-4f0f6e64.jpg)
+![Largest 2](results/extreme_boxes/largest_2_70cc96e1-aa1781b5.jpg)
+![Largest 3](results/extreme_boxes/largest_3_4efe84c6-93313761.jpg)
+![Largest 4](results/extreme_boxes/largest_4_2e5a3ced-c7603d0d.jpg)
+![Largest 5](results/extreme_boxes/largest_5_1d33c83b-71e1ea1c.jpg)
+
+> **Summary:**  
+> - The dataset contains a wide variety of object sizes.  
+> - Small objects (e.g., traffic signs, pedestrians far away) are sparse but crucial for detection.  
+> - Large objects (e.g., buses, trucks) can occupy most of the image and may skew training if oversampled.  
+> - The largest objects cover most of the frame and include vehicles very close to the camera or groups of objects. These are generally easier to detect but may require careful handling for overlapping boxes.
+
 ---
 
 ### 4.3 Objects per Image
 
-![Objects per Image](results/objects_per_image.png)
+![Objects per Image](results/objects_per_image_train.png)
 
-> _Comment if dataset has mostly crowded or sparse scenes._
+
+![Top 5 Image with highest # of objects](results/top5_crowded_images_train.png)
+
+> **Summary:**  
+> On average, images contain ~20 objects. Most images fall in a normal range (0–60 objects), but there are a few outliers with **80–100 objects**. These outlier images are likely crowded street scenes or annotated with many small objects (e.g., pedestrians, bikes).  
+
+
+>
+> **Potential Improvements / Considerations for Object Detection:**  
+> 1. **Outlier Handling:** Consider filtering or separately handling extremely crowded images, as they might skew metrics or make training unstable.  
+> 2. **Data Augmentation:** Crowded images can benefit from augmentation (cropping, scaling, rotation) to help the model generalize to dense scenarios.  
+> 3. **Weighted Loss / Focal Loss:** If the majority of images are sparse, using a weighted loss can prevent bias toward sparse scenes.  
+> 4. **Visualization Checks:** Check if extreme object counts include invalid bounding boxes (e.g., very small boxes) and optionally remove them.  
+> 5. **Stratified Sampling:** Ensure train/validation splits preserve the distribution of objects per image, so the model sees a representative range of crowded and sparse scenes.
 
 ---
 
 ### 4.4 Spatial Heatmap of Object Centers
 
-![Object Center Heatmap](results/object_heatmap.png)
+![Object Center Heatmap](results/object_heatmap_train.png)
 
-> _Interpret if object centers are biased (e.g., vehicles always near bottom)._
+**Summary:**  
+- The object center heatmap is **oval-shaped and centered**, indicating that most annotated objects appear around the middle of the image.  
+- Horizontally, objects are concentrated near the center, with fewer annotations near the left and right edges.  
+- Vertically, objects are mostly in the middle to lower regions of the frame, which is typical for vehicle-mounted cameras capturing road scenes.  
+- This suggests a **central bias** in the dataset, meaning the model may have limited exposure to objects appearing near image borders.  
+
+**Next Steps / Recommendations:**  
+1. **Data Augmentation:**  
+   - Apply **translation, scaling, and cropping** to simulate objects appearing in less common positions.  
+   - This can help the model generalize better to off-center objects.  
+
+2. **Class / Scene Balancing:**  
+   - Consider adding images where objects appear in corners or in unusual positions to reduce bias.  
+
+3. **Model Anchors & FOV:**  
+   - If using anchor-based detectors, ensure anchor sizes and positions cover the full image, including the edges.  
+
+4. **Evaluation Considerations:**  
+   - During validation, check performance specifically for objects near the image edges to quantify bias impact.
 
 ---
 
@@ -261,61 +318,79 @@ Recommendations: Consider data augmentation for rare classes, class-aware sampli
 
 ### 5.1 Time of Day
 
-![Time of Day Distribution](results/timeofday_distribution.png)
+![Time of Day Distribution](results/timeofday_distribution_train.png)
 
 | Time | Count | % |
 |:-----|------:|--:|
-| Daytime | [ ] | [ ] |
-| Night | [ ] | [ ] |
-| Dawn/Dusk | [ ] | [ ] |
+| Daytime | 36728 | 52.6% |
+| Night | 27971 | 40.0% |
+| Dawn/dusk | 5027 | 7.2% 
 
+> _Summary:_ Most images are captured during daytime (~53%), followed by night (~40%). Dawn/Dusk images are relatively rare (~7%), indicating a potential imbalance if training models to recognize objects in low-light conditions.
 ---
 
 ### 5.2 Weather Conditions
 
-![Weather Distribution](results/weather_distribution.png)
+![Weather Distribution](results/weather_distribution_train.png)
+
+
 
 | Weather | Count | % |
 |:--------|------:|--:|
-| Clear | [ ] | [ ] |
-| Rainy | [ ] | [ ] |
-| Foggy | [ ] | [ ] |
-| Snowy | [ ] | [ ] |
+| Clear | 37344 | 53.5% |
+| Rainy | 5070 | 7.3% |
+| Foggy | 130 | 0.2% |
+| Snowy | 5549 | 7.9% |
+
+> _Summary:_  
+The dataset is dominated by clear weather conditions (~54%), while rainy (~7%), snowy (~8%), and foggy (~0.2%) images are much less frequent. This indicates a bias toward good weather scenes, so models trained on this data may perform less reliably in rare weather conditions like fog or snow.  
 
 ---
 
 ### 5.3 Scene Types
-
-![Scene Distribution](results/scene_distribution.png)
+![Scene Distribution](results/scene_distribution_train.png)
 
 | Scene | Count | % |
 |:------|------:|--:|
-| City Street | [ ] | [ ] |
-| Highway | [ ] | [ ] |
-| Residential | [ ] | [ ] |
+| City Street | 43516 | 62.3% |
+| Highway | 17379 | 24.9% |
+| Residential | 8074 | 11.6% |
+
+> _Summary:_  
+The majority of images are from city streets (~62%), followed by highways (~25%) and residential areas (~12%). This indicates a bias toward urban scenes, which may affect the model's performance in less represented environments like residential areas.
 
 ---
 
 ### 5.4 Correlation between Scene & Object Types
 
-![Scene-Object Correlation Heatmap](results/scene_object_corr.png)
+![Scene-Object Correlation Heatmap](results/scene_object_corr_train.png)
 
-> _Interpret patterns (e.g., trucks mainly appear on highways)._
+> _Summary:_  
+The heatmap shows clear patterns between object types and scene categories.  
+- **Cars** and **lanes** dominate city streets.  
+- **Trucks** and **buses** appear more frequently on highways.  
+- **Pedestrians**, **bikes**, and **riders** are mostly seen in city streets and residential areas.  
+
+> _Interpretation:_  
+The correlation suggests that some object classes are strongly scene-dependent. Models trained on this dataset may learn these biases, which could affect generalization to uncommon scene-object combinations. Augmentation or balanced sampling may help mitigate this.
+
 
 ---
+
+
 
 ## 6. 🔍 Train-Test Split Validation
 
 | Split | #Images | #Objects | Note |
 |:------|---------:|---------:|:-----|
-| Train | [ ] | [ ] |  |
-| Val | [ ] | [ ] |  |
-| Test | [ ] | [ ] |  |
+| Train | 69863 | 1941237 |  |
+| Val   | 10000 | 279237 |  |
+
+
+---
 
 **Class Distribution Comparison:**
-![Train-Test Comparison](results/train_test_class_balance.png)
-
-> _Check if each subset is representative of overall data._
+![Train-Test Comparison](results/train_val_class_balance.png)
 
 ---
 
@@ -323,11 +398,13 @@ Recommendations: Consider data augmentation for rare classes, class-aware sampli
 
 | Aspect | Observation | Potential Fix |
 |:--------|:-------------|:---------------|
-| Class Imbalance | [ ] | Apply class weights or augment rare classes |
-| Low-light Frames | [ ] | Use histogram equalization or data filtering |
-| Tiny Objects | [ ] | Use FPN or multi-scale anchors |
-| Duplicates | [ ] | Removed before training |
-| Data Bias | [ ] | Consider domain adaptation |
+| Class Imbalance | Classes like **car** and **lane** dominate, while **rider**, **bike**, and **motor** have very few examples | Apply class weights or augment rare classes |
+| Low-light Frames | ~40% of images are night-time, which may cause low contrast and poor visibility | Use histogram equalization, contrast/brightness augmentation, or data filtering |
+| Tiny Objects | Many very small bounding boxes are present, some nearly invalid | Use FPN (Feature Pyramid Networks) or multi-scale anchors; optionally remove invalid boxes |
+| Duplicates | 1083 duplicate images detected, but visually many look different | Remove duplicates before training to avoid bias and redundancy |
+| Data Bias | Object centers are biased toward the middle of images; scene-object correlations show trucks mostly on highways | Consider domain adaptation or augmentation to cover rare object-scene combinations |
+| Crowded Scenes | Few images have extreme object counts (>80 per image) | Augment crowded scenes or normalize object distribution across training set |
+
 
 ---
 
@@ -355,15 +432,18 @@ Recommendations: Consider data augmentation for rare classes, class-aware sampli
 ## 9. 🧾 Summary & Next Steps
 
 **Key Observations:**
-- [ ]  
-- [ ]  
-- [ ]  
+- Class imbalance is significant: "car" and "lane" dominate, while "rider", "bike", "motor", and "train" are rare.
+- Dataset contains many low-light frames (~47% nighttime/dawn-dusk) and some low-contrast or tiny objects.
+- Certain objects tend to appear in specific scenes (e.g., trucks mainly on highways), and crowded images are rare but exist (up to 80-100 objects).
 
-**Next Steps:**
-1. Data Cleaning / Balancing  
-2. Augmentation Plan  
-3. Model Preprocessing Decisions  
-4. Training/Validation Strategy  
+**Next Steps / Recommendations:**
+- Apply **class balancing strategies** (class weights, oversampling, or augmentations) for rare classes.
+- Use **contrast and brightness augmentation** for low-light frames and histogram equalization if needed.
+- Employ **multi-scale anchors or FPN** to handle tiny objects.
+- Filter out **invalid or extremely small bounding boxes** to improve model quality.
+- Consider **scene-aware or domain adaptation techniques** if deploying in diverse environments.
+- Optionally, leverage **embedding clustering** insights to design scene-specific augmentations or data splits.
+
 
 ---
 
