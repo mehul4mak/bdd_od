@@ -31,7 +31,7 @@ The goal is to understand dataset structure, annotation quality, and potential b
 - [ ] Segmentation  
 
 **Example Image:**
-![Sample Image](results/sample_image.jpg)
+![Sample Image](results/sample_image_train.jpg)
 
 ![Sample Image Grid](results/sample_images_grid.png)
 

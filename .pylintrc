@@ -4,7 +4,7 @@ max-line-length=120
 
 [MESSAGES CONTROL]
 # Disable specific message types
-disable=C0111, R0903, W0201
+disable=C0111, R0903, W0201, C0103
 
 [REPORTS]
 # Whether to display a full report
@@ -25,8 +25,8 @@ max-args=5
 [CLASSES]
 # List of class names for which member functions should not be flagged
 # for having too many methods
-valid-class-methods=__init__, __del__, __str__
+
 
 [TYPECHECK]
 # Python version to check compatibility for
-python-version=3.8
+
